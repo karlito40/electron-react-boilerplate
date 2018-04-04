@@ -1,11 +1,8 @@
 import { ipcMain } from 'electron';
 import { spawn } from 'child_process';
 import { create as ForgeCreate } from 'forge-struct';
-// import { promisify } from 'util';
-// import * as fs from 'fs';
+// import * as ConfigManager from './manager/config';
 import templatePackageBuilder from './templates/package.json';
-
-// const readFile = promisify(fs.readFile);
 
 export function register() { // eslint-disable-line
   ipcMain.on('asynchronous-message', (event, arg) => {
@@ -43,27 +40,12 @@ export function register() { // eslint-disable-line
   ipcMain.on('project-creation', async (event, arg) => {
     console.log('project-creation', arg);
     const { data: { path } } = arg;
-    console.log('path', path);
-    console.log('templatePackageBuilder', templatePackageBuilder);
-    // let templatePackageBuilder;
-    //
-    // try {
-    //   templatePackageBuilder = await readFile(`${__dirname}/templates/package.json`, 'utf-8');
-    // } catch (e) {
-    //   console.log('read package', e);
-    // }
 
     try {
       const project = [
-        path,
-        {
-          path: `${path}/package.json`,
-          content: templatePackageBuilder
-        },
-        {
-          path: `${path}/index.js`,
-          content: "console.log('Hello !');"
-        }
+        { path: `${path}/builder.config.js` },
+        { path: `${path}/components` },
+        { path: `${path}/package.json`, content: templatePackageBuilder },
       ];
 
       await ForgeCreate(project);
@@ -71,7 +53,6 @@ export function register() { // eslint-disable-line
       console.log('forge create', e);
       return;
     }
-
 
     const child = spawn('npm', ['install', '-dd'], { cwd: path });
 
