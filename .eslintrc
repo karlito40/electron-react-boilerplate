@@ -10,12 +10,10 @@
     "node": true
   },
   "rules": {
-    "wrap-iife": "off",
     "arrow-parens": ["off"],
     "compat/compat": "error",
     "consistent-return": "off",
     "comma-dangle": "off",
-    "no-plusplus": "off",
     "generator-star-spacing": "off",
     "import/no-unresolved": "error",
     "import/no-extraneous-dependencies": "off",

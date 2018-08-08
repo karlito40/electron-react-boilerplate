@@ -12,8 +12,6 @@
  */
 import { app, BrowserWindow } from 'electron';
 import MenuBuilder from './menu';
-import * as Event from './event';
-import * as ConfigManager from './manager/config';
 import { homedir } from 'os';
 
 let mainWindow = null;
@@ -58,15 +56,9 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
-  // if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
     await installExtensions();
-  // }
-
-  console.log('Manage config...');
-  await ConfigManager.entry(homedir() + '/.webbuilder');
-  console.log('Manage done...');
-
-  Event.register();
+  }
 
   mainWindow = new BrowserWindow({
     show: false,
